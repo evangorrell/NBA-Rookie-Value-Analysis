@@ -51,3 +51,6 @@ outputs/
 
 # Pipeline information 
 PIPELINE.md
+
+# Gitignore
+.gitignore
