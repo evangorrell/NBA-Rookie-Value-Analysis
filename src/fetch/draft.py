@@ -18,7 +18,7 @@ def fetch_draft_class(season):
     # Extract the draft year from season (e.g., "2025-26" -> 2025)
     draft_year = int(season.split('-')[0])
 
-    print(f"Fetching draft data for {draft_year} draft...")
+    print(f"Fetching data for {draft_year} draft...")
 
     try:
         # Fetch all draft history
@@ -55,7 +55,7 @@ def fetch_draft_class(season):
 
 def get_rookie_player_stats_draft(stats_df, draft_df):
     """
-    Filter stats to only rookies based on draft data.
+    Merge player stats with draft data to identify and filter drafted rookies.
 
     Args:
         stats_df: DataFrame with all player stats

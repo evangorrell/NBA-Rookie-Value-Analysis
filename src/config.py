@@ -29,11 +29,11 @@ def get_current_season():
 
 def generate_historical_seasons(current_season, start_year=2019):
     """
-    Generate list of historical seasons from start_year up to (but not including) current season.
+    Generate list of historical seasons from start_year up to current season.
 
     Args:
         current_season: Current season string like "2025-26"
-        start_year: First year to include in historical data (default: 2019)
+        start_year: First year to include in historical data
 
     Returns:
         List of season strings like ["2019-20", "2020-21", ...]
@@ -51,21 +51,24 @@ def generate_historical_seasons(current_season, start_year=2019):
 # Current season to analyze (auto-detected)
 CURRENT_SEASON = get_current_season()
 
+# First year of historical data for training
+START_YEAR = 2019
+
 # Seasons to include in historical training data (auto-generated)
-HISTORICAL_SEASONS = generate_historical_seasons(CURRENT_SEASON, start_year=2019)
+HISTORICAL_SEASONS = generate_historical_seasons(CURRENT_SEASON, start_year=START_YEAR)
 
 # We use PIE (Player Impact Estimate) * Minutes as our production measure
-TARGET_METRIC = "PIE"  # Player Impact Estimate
-VOLUME_METRIC = "MIN"  # Minutes played
+TARGET_METRIC = "PIE" 
+VOLUME_METRIC = "MIN"
 
 # Minimum games played to include a rookie in analysis
 MIN_GAMES_PLAYED = 10
 
 # Model settings
 MODEL_TYPE = "gradient_boosting"  # Best option for non-linear relationships
-CROSS_VALIDATION_FOLDS = 5 # k = 5
+CROSS_VALIDATION_FOLDS = 5
 
 # Visualization settings
 CHART_FIGSIZE = (12, 16)
-SURPLUS_COLOR = "#2ecc71"  # Green
-DEFICIT_COLOR = "#e74c3c"  # Red
+SURPLUS_COLOR = "#2ecc71"  
+DEFICIT_COLOR = "#e74c3c"

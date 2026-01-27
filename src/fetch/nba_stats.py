@@ -34,9 +34,7 @@ def fetch_player_stats(season, season_type=SeasonType.regular):
         # Add season column
         df['SEASON'] = season
 
-        print(f"  Retrieved {len(df)} players")
-
-        # Rate limit to be respectful to NBA API
+        # Rate limit to NBA API
         time.sleep(0.6)
 
         return df
@@ -48,7 +46,7 @@ def fetch_player_stats(season, season_type=SeasonType.regular):
 
 def fetch_advanced_stats(season, season_type=SeasonType.regular):
     """
-    Fetch advanced stats including PIE.
+    Fetch Player Impact Estimate (PIE).
 
     Args:
         season: Season string like "2025-26"
@@ -70,8 +68,6 @@ def fetch_advanced_stats(season, season_type=SeasonType.regular):
 
         df = stats.get_data_frames()[0]
         df['SEASON'] = season
-
-        print(f"  Retrieved advanced stats for {len(df)} players")
 
         time.sleep(0.6)
 

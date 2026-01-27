@@ -160,7 +160,14 @@ Edit `src/config.py` to customize:
 
 ### Clearing Cache
 
-If you need to refresh historical data (e.g., mid-season updates):
+The cache automatically updates when:
+- Current season changes (e.g., 2025-26 → 2026-27)
+- Historical seasons range changes (e.g., removing 2019-20)
+
+**Cache filename format:** `historical_data_{first-season}_to_{last-season}_for_{current-season}.pkl`
+**Example:** `historical_data_2019-20_to_2024-25_for_2025-26.pkl`
+
+If you need to manually force a refresh (e.g., mid-season data updates):
 
 ```bash
 rm outputs/historical_data_*.pkl

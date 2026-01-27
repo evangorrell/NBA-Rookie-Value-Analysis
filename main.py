@@ -114,11 +114,14 @@ def main():
     print("\n" + "=" * 60)
     print("✓ ANALYSIS COMPLETE")
     print("=" * 60)
+    first_season = config.HISTORICAL_SEASONS[0] if config.HISTORICAL_SEASONS else "none"
+    last_season = config.HISTORICAL_SEASONS[-1] if config.HISTORICAL_SEASONS else "none"
+
     print("\nOutputs:")
     print(f"  - outputs/{config.CURRENT_SEASON}_rookies_residuals.csv")
     print(f"  - outputs/{config.CURRENT_SEASON}_residual_bar_chart.png")
     print(f"  - outputs/{config.CURRENT_SEASON}_accuracy_diagnostic.png")
-    print(f"  - outputs/historical_data_{config.CURRENT_SEASON}.pkl (cached)")
+    print(f"  - outputs/historical_data_{first_season}_to_{last_season}_for_{config.CURRENT_SEASON}.pkl (cached)")
     print("  - outputs/model.pkl")
 
 

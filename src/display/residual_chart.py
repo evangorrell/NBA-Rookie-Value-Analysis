@@ -5,18 +5,17 @@ import numpy as np
 import os
 
 
-def create_residual_chart(residuals_df, current_season, output_path=None,
-                         figsize=(12, 16), surplus_color='#2ecc71', deficit_color='#e74c3c'):
+def create_residual_chart(residuals_df, current_season, output_path=None, figsize=(12, 16), surplus_color='#2ecc71', deficit_color='#e74c3c'):
     """
     Create horizontal bar chart showing residual values.
 
     Args:
-        residuals_df: DataFrame with residuals (should be sorted)
+        residuals_df: DataFrame with residuals
         current_season: Current season string (e.g., "2025-26")
-        output_path: Path to save the chart (auto-generated if None)
-        figsize: Figure size (width, height)
-        surplus_color: Color for positive residuals (green)
-        deficit_color: Color for negative residuals (red)
+        output_path: Path to save the chart (auto-generated)
+        figsize: Figure size
+        surplus_color: Green for positive residuals 
+        deficit_color: Red for negative residuals 
 
     Returns:
         Figure object
@@ -25,7 +24,7 @@ def create_residual_chart(residuals_df, current_season, output_path=None,
         output_path = f'outputs/{current_season}_residual_bar_chart.png'
     print("Creating Residual Chart...")
 
-    # Sort by residual (highest to lowest)
+    # Sort by residual
     df = residuals_df.sort_values('residual', ascending=True).copy()
 
     # Create labels with player name and team
@@ -47,14 +46,13 @@ def create_residual_chart(residuals_df, current_season, output_path=None,
     # Set labels
     ax.set_yticks(y_pos)
     ax.set_yticklabels(df['label'], fontsize=10)
-    ax.set_xlabel('Residual Value (Production - Expected)', fontsize=12, fontweight='bold')
-    ax.set_title(f'NBA Rookie Contract Value Analysis {current_season}\nSurplus (Green) vs Deficit (Red)',
-                 fontsize=14, fontweight='bold', pad=20)
+    ax.set_xlabel('Residual Value', fontsize=12, fontweight='bold')
+    ax.set_title(f'NBA Rookie Contract Value Analysis {current_season}', fontsize=14, fontweight='bold', pad=20)
 
     # Add grid
     ax.grid(axis='x', alpha=0.3, linestyle='--')
 
-    # Add text annotations for ALL players
+    # Add text annotations for players
     for idx, (i, row) in enumerate(df.iterrows()):
         residual = row['residual']
         # Position text to the right of positive bars, left of negative bars
