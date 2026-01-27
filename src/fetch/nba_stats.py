@@ -17,7 +17,7 @@ def fetch_player_stats(season, season_type=SeasonType.regular):
     Returns:
         DataFrame with player stats including PIE, minutes, etc.
     """
-    print(f"Fetching player stats for {season}...")
+    print(f"\nProcessing player stats for {season}...")
 
     try:
         # Fetch traditional stats
@@ -55,7 +55,7 @@ def fetch_advanced_stats(season, season_type=SeasonType.regular):
     Returns:
         DataFrame with advanced stats
     """
-    print(f"Fetching advanced stats for {season}...")
+    print(f"Processing advanced stats for {season}...")
 
     try:
         stats = leaguedashplayerstats.LeagueDashPlayerStats(

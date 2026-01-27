@@ -17,17 +17,17 @@ from src.features.build_dataset import build_historical_dataset, build_current_d
 from src.model.train import train_model, save_model
 from src.model.predict import calculate_residuals, export_residuals
 from src.display.residual_chart import create_residual_chart, create_summary_stats
-from src.model.diagnostics import create_prediction_accuracy_plot, print_accuracy_examples, print_accuracy_by_salary_range, validate_specific_players
+from src.model.diagnostics import create_prediction_accuracy_plot, validate_specific_players
 
 
 def main():
     """Run the complete analysis pipeline."""
     print("=" * 60)
-    print("NBA ROOKIE CONTRACT SURPLUS VALUE ANALYSIS")
+    print("NBA ROOKIE CONTRACT VALUE ANALYSIS")
     print("=" * 60)
 
     # Step 1: Build historical dataset
-    print("\n[1/6] Building historical training dataset...")
+    print("\nBuilding historical training dataset...")
     historical_df = build_historical_dataset(
         seasons=config.HISTORICAL_SEASONS,
         current_season=config.CURRENT_SEASON,
@@ -38,18 +38,16 @@ def main():
         print("ERROR: No historical data collected. Check API access and season values.")
         return
 
-    print(f"\n  Historical dataset: {len(historical_df)} rookies")
+    print(f"  Historical dataset: {len(historical_df)} rookies")
     print(f"  Seasons: {config.HISTORICAL_SEASONS}")
 
     # Step 2: Train model
-    print("\n[2/6] Training regression model...")
     pipeline = train_model(historical_df)
 
     # Save model
     save_model(pipeline)
 
     # Step 3: Build current season dataset
-    print("\n[3/6] Fetching current season data...")
     current_df = build_current_dataset(
         season=config.CURRENT_SEASON,
         min_games=config.MIN_GAMES_PLAYED
@@ -59,17 +57,13 @@ def main():
         print("ERROR: No current season data collected.")
         return
 
-    print(f"\n  Current season: {len(current_df)} rookies")
-
     # Step 4: Calculate residuals
-    print("\n[4/6] Calculating residual values...")
     residuals_df = calculate_residuals(current_df, pipeline)
 
     # Export residuals
     export_residuals(residuals_df, config.CURRENT_SEASON)
 
     # Step 5: Create visualization
-    print("\n[5/6] Creating visualization...")
     create_residual_chart(
         residuals_df,
         config.CURRENT_SEASON,
@@ -79,22 +73,20 @@ def main():
     )
 
     # Step 6: Model accuracy diagnostics
-    print("\n[6/6] Running model diagnostics...")
+    print("\nRunning accuracy diagnostics...")
     create_prediction_accuracy_plot(residuals_df, config.CURRENT_SEASON)
-    print_accuracy_examples(residuals_df, n=5)
-    print_accuracy_by_salary_range(residuals_df)
 
     # Print summary
     create_summary_stats(residuals_df)
 
     # Print top performers
-    print("\n=== Top 5 Surplus Value Rookies ===")
+    print("\n  Top 5 Surplus Value Rookies")
     top_5 = residuals_df.head(5)
     for _, row in top_5.iterrows():
         print(f"  {row['PLAYER_NAME']:20s} ({row['team_abbrev']:3s}) | "
               f"Pick {row['pick']:2.0f} | Residual: +{row['residual']:.2f}")
 
-    print("\n=== Bottom 5 (Biggest Deficits) ===")
+    print("\n  Bottom 5 (Biggest Deficits) Rookies")
     bottom_5 = residuals_df.tail(5).iloc[::-1]  # Reverse to show worst first
     bottom_5_names = []
     for _, row in bottom_5.iterrows():
@@ -102,17 +94,45 @@ def main():
               f"Pick {row['pick']:2.0f} | Residual: {row['residual']:.2f}")
         bottom_5_names.append(row['PLAYER_NAME'])
 
-    # Validate bottom performers to explain why they have deficits
-    if len(bottom_5_names) > 0:
-        print("\n" + "=" * 60)
-        print("VALIDATING DEFICIT PLAYERS")
-        print("(Understanding why top picks may show negative residuals)")
-        print("=" * 60)
-        # Validate up to 3 players from bottom to avoid clutter
-        validate_specific_players(residuals_df, bottom_5_names[:3], historical_df)
+    # Prompt user for custom player breakdowns
+    print("\n=== Player Breakdown ===")
+
+    while True:
+        user_input = input("\nWould you like a detailed breakdown for any specific player(s)?\n"
+                           "Enter player name(s) separated by commas, or press Enter to skip: ").strip()
+
+        # If Enter, skip
+        if not user_input:
+            break
+
+        # Parse comma-separated names
+        player_names = [name.strip() for name in user_input.split(',') if name.strip()]
+
+        # If no valid names after parsing
+        if not player_names: 
+            print(f"\n  No valid player names provided.")
+            print(f"  Please try again or press Enter to skip.")
+            continue
+
+        # Check if any players match
+        found_any = False
+        for player_name in player_names:
+            matches = residuals_df[residuals_df['PLAYER_NAME'].str.contains(player_name, case=False, na=False)]
+            if not matches.empty:
+                found_any = True
+                break
+
+        if found_any:
+            # At least one player found, proceed with breakdown
+            validate_specific_players(residuals_df, player_names, historical_df)
+            break
+        else:
+            # No matches found, reprompt
+            print(f"\n    No players found matching: {', '.join(player_names)}")
+            print(f"  Please try again with different name(s) or press Enter to skip.")
 
     print("\n" + "=" * 60)
-    print("✓ ANALYSIS COMPLETE")
+    print("ANALYSIS COMPLETE")
     print("=" * 60)
     first_season = config.HISTORICAL_SEASONS[0] if config.HISTORICAL_SEASONS else "none"
     last_season = config.HISTORICAL_SEASONS[-1] if config.HISTORICAL_SEASONS else "none"
@@ -123,6 +143,9 @@ def main():
     print(f"  - outputs/{config.CURRENT_SEASON}_accuracy_diagnostic.png")
     print(f"  - outputs/historical_data_{first_season}_to_{last_season}_for_{config.CURRENT_SEASON}.pkl (cached)")
     print("  - outputs/model.pkl")
+
+    # Keep matplotlib windows open
+    input("\nPress Enter to exit and close charts...")
 
 
 if __name__ == '__main__':

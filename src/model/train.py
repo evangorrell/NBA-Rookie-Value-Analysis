@@ -16,7 +16,7 @@ def create_model(model_type):
     Create regression model.
 
     Args:
-        model_type: Type of model ('gradient_boosting', 'spline', etc.)
+        model_type: Type of model (gradient_boosting)
 
     Returns:
         Sklearn model
@@ -42,15 +42,15 @@ def train_model(historical_df):
     Returns:
         Trained pipeline (scaler + model)
     """
-    print("\n=== Training Model ===")
-    print(f"Model type: {config.MODEL_TYPE}")
-    print(f"CV folds: {config.CROSS_VALIDATION_FOLDS}")
+    print("\nTraining regression model...")
+    print(f"  Model type: {config.MODEL_TYPE}")
+    print(f"  CV folds: {config.CROSS_VALIDATION_FOLDS}")
 
     # Prepare features and target
     X = historical_df[['salary']].values
     y = historical_df['production'].values
 
-    print(f"Training data: {len(X)} rookies")
+    print(f"  Training data: {len(X)} rookies")
     print(f"  Average salary range: ${X.min():,.0f} - ${X.max():,.0f}")
     print(f"  Production range: {y.min():.2f} - {y.max():.2f}")
 
@@ -67,20 +67,15 @@ def train_model(historical_df):
         pipeline, X, y,
         cv=config.CROSS_VALIDATION_FOLDS,
         scoring='r2',
-        n_jobs=-1
+        n_jobs=1  # Single-threaded to avoid joblib cleanup warnings
     )
 
     print(f"  CV R² scores: {cv_scores}")
     print(f"  Mean CV R²: {cv_scores.mean():.3f} (+/- {cv_scores.std() * 2:.3f})")
 
     # Train final model on all data
-    print("\nTraining final model on all historical data...")
+    print("\nTraining model on all historical data...")
     pipeline.fit(X, y)
-
-    # Report feature importance if available
-    if hasattr(pipeline.named_steps['regressor'], 'feature_importances_'):
-        importance = pipeline.named_steps['regressor'].feature_importances_
-        print(f"  Feature importance (salary): {importance[0]:.3f}")
 
     print("  Model training complete")
 
@@ -92,7 +87,6 @@ def save_model(pipeline, filepath='outputs/model.pkl'):
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
     with open(filepath, 'wb') as f:
         pickle.dump(pipeline, f)
-    print(f"✓ Model saved to {filepath}")
 
 
 def load_model(filepath='outputs/model.pkl'):

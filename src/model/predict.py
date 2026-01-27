@@ -17,7 +17,7 @@ def calculate_residuals(current_df, pipeline):
     Returns:
         DataFrame with residuals added
     """
-    print("\nCalculating Residuals...")
+    print("\nCalculating residuals...")
 
     # Make predictions
     X = current_df[['salary']].values
@@ -28,7 +28,7 @@ def calculate_residuals(current_df, pipeline):
     current_df['expected_production'] = expected_production
     current_df['residual'] = current_df['production'] - current_df['expected_production']
 
-    # Sort by residual (highest surplus first)
+    # Sort by residual (highest surplus descending to greatest deficit)
     current_df = current_df.sort_values('residual', ascending=False)
 
     print(f"  Calculated residuals for {len(current_df)} rookies")
@@ -45,7 +45,7 @@ def export_residuals(residuals_df, current_season, filepath=None):
     Args:
         residuals_df: DataFrame with residuals
         current_season: Current season string (e.g., "2025-26")
-        filepath: Output filepath (auto-generated if None)
+        filepath: Output filepath
     """
     if filepath is None:
         filepath = f'outputs/{current_season}_rookies_residuals.csv'
@@ -66,6 +66,5 @@ def export_residuals(residuals_df, current_season, filepath=None):
 
     # Save to CSV
     export_df.to_csv(filepath, index=False)
-    print(f"✓ Residuals exported to {filepath}")
 
     return export_df

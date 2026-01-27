@@ -22,7 +22,7 @@ def create_residual_chart(residuals_df, current_season, output_path=None, figsiz
     """
     if output_path is None:
         output_path = f'outputs/{current_season}_residual_bar_chart.png'
-    print("Creating Residual Chart...")
+    print("\nCreating residual chart...")
 
     # Sort by residual
     df = residuals_df.sort_values('residual', ascending=True).copy()
@@ -75,10 +75,10 @@ def create_residual_chart(residuals_df, current_season, output_path=None, figsiz
     # Save figure
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
-    print(f"✓ Chart saved to {output_path}")
 
     # Display the chart
-    plt.show()
+    plt.show(block=False)
+    plt.pause(0.1)
 
     return fig
 
@@ -103,13 +103,13 @@ def create_summary_stats(residuals_df):
         'median_residual': residuals_df['residual'].median(),
     }
 
-    print("\n=== Summary Statistics ===")
-    print(f"Total rookies analyzed: {stats['total_rookies']}")
-    print(f"Providing surplus value: {stats['surplus_rookies']}")
-    print(f"Providing deficit value: {stats['deficit_rookies']}")
-    print(f"Maximum surplus: +{stats['max_surplus']:.2f}")
-    print(f"Maximum deficit: {stats['max_deficit']:.2f}")
-    print(f"Mean residual: {stats['mean_residual']:.2f}")
-    print(f"Median residual: {stats['median_residual']:.2f}")
+    print("\n=== Current Season Summary Statistics ===")
+    print(f"  Rookies analyzed: {stats['total_rookies']}")
+    print(f"  Providing surplus value: {stats['surplus_rookies']}")
+    print(f"  Providing deficit value: {stats['deficit_rookies']}")
+    print(f"  Maximum surplus: +{stats['max_surplus']:.2f}")
+    print(f"  Maximum deficit: {stats['max_deficit']:.2f}")
+    print(f"  Mean residual: {stats['mean_residual']:.2f}")
+    print(f"  Median residual: {stats['median_residual']:.2f}")
 
     return stats

@@ -85,8 +85,6 @@ def build_historical_dataset(seasons, current_season, min_games=10):
     salary_scale = load_rookie_scale_salaries(current_season)
 
     for season in seasons:
-        print(f"\nProcessing {season}...")
-
         # Fetch rookie stats
         rookies = fetch_rookie_stats(
             season,
@@ -124,8 +122,6 @@ def build_historical_dataset(seasons, current_season, min_games=10):
 
     dataset = pd.concat(all_rookies, ignore_index=True)
 
-    print(f"\n  Built historical dataset with {len(dataset)} rookies across {len(seasons)} seasons")
-
     # Save to cache for future runs
     os.makedirs('outputs', exist_ok=True)
     with open(cache_file, 'wb') as f:
@@ -144,8 +140,6 @@ def build_current_dataset(season, min_games=10):
     Returns:
         DataFrame with current rookies
     """
-    print(f"\nProcessing current season: {season}...")
-
     # Load salary scale
     salary_scale = load_rookie_scale_salaries(season)
 
@@ -172,7 +166,5 @@ def build_current_dataset(season, min_games=10):
         'PLAYER_NAME', 'SEASON', 'pick', 'salary', 'production',
         'GP', 'MIN', 'PIE', 'team_abbrev'
     ]].copy()
-
-    print(f"  Built current season dataset.")
 
     return rookies
