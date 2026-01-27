@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 NBA Rookie Contract Regression Value Analysis
 
