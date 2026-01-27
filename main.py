@@ -128,12 +128,10 @@ def main():
             break
         else:
             # No matches found, reprompt
-            print(f"\n    No players found matching: {', '.join(player_names)}")
+            print(f"\n  No players found matching: {', '.join(player_names)}")
             print(f"  Please try again with different name(s) or press Enter to skip.")
 
-    print("\n" + "=" * 60)
-    print("ANALYSIS COMPLETE")
-    print("=" * 60)
+    print("\nANALYSIS COMPLETE")
     first_season = config.HISTORICAL_SEASONS[0] if config.HISTORICAL_SEASONS else "none"
     last_season = config.HISTORICAL_SEASONS[-1] if config.HISTORICAL_SEASONS else "none"
 
