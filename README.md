@@ -30,10 +30,11 @@ Draft position determines salary (fixed scale), but draft position doesn't relia
 - **Sorted:** Highest surplus at top, biggest deficit at bottom
 - **Colors:** Green (surplus), red (deficit), vertical zero line (historical average)
 
-### 2. Accuracy Diagnostic Plot
+### 2. Accuracy Diagnostic Plot (saved to outputs/)
 - Scatter plot: Predicted vs. Actual production
 - Shows model fit quality (MAE, RMSE, R²)
 - Explains why salary is a weak predictor
+- Saved to file, not displayed (metrics printed to terminal)
 
 ### 3. Interactive Player Validation
 - Option to request detailed breakdowns for specific players
@@ -102,9 +103,8 @@ python main.py
 2. Train regression model on historical benchmarks
 3. Fetch current season (2025-26) rookie data
 4. Calculate residual values
-5. Display bar chart and accuracy diagnostic
+5. Display residual bar chart (accuracy plot saved to outputs/)
 6. Prompt for optional player breakdowns
-7. Wait for you to close charts (press Enter to exit)
 
 **First run:** Fetches data from NBA API (~30-60 seconds)
 **Subsequent runs:** Loads from cache (~5 seconds)

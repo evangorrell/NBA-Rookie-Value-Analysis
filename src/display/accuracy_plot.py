@@ -119,9 +119,8 @@ def create_prediction_accuracy_plot(residuals_df, current_season, output_dir='ou
     # Save
     output_path = os.path.join(output_dir, f'{current_season}_accuracy_diagnostic.png')
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    print(f"\n  Accuracy diagnostic saved to {output_path}")
 
-    # Display (non-blocking)
-    plt.show(block=False)
-    plt.pause(0.1)
+    plt.close(fig)  # Close without displaying
 
     return fig

@@ -141,8 +141,8 @@ def main():
     print(f"  - outputs/historical_data_{first_season}_to_{last_season}_for_{config.CURRENT_SEASON}.pkl (cached)")
     print("  - outputs/model.pkl")
 
-    # Keep matplotlib windows open
-    input("\nPress Enter to exit and close charts...")
+    # Keep matplotlib window open
+    input("\nPress Enter to exit and close chart...")
 
 
 if __name__ == '__main__':
