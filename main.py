@@ -6,11 +6,6 @@ relative to their rookie-scale contracts.
 """
 
 import sys
-import os
-
-# Add src to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
-
 from src import config
 from src.features.build_dataset import build_historical_dataset, build_current_dataset
 from src.model.train import train_model, save_model

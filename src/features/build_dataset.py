@@ -21,7 +21,7 @@ def compute_production(df, target_metric='PIE', volume_metric='MIN'):
     Returns:
         DataFrame with 'production' column added
     """
-    # PIE is already a percentage, so multiply by minutes
+    # PIE is a percentage, so multiply by minutes
     df['production'] = df[target_metric] * df[volume_metric]
 
     # Handle missing values
@@ -33,7 +33,6 @@ def compute_production(df, target_metric='PIE', volume_metric='MIN'):
 def add_salary_info(rookies_df, salary_scale_df):
     """
     Add salary information to rookies based on their draft pick.
-    Only includes drafted players.
 
     Args:
         rookies_df: DataFrame with rookie stats and draft pick
@@ -69,7 +68,6 @@ def build_historical_dataset(seasons, current_season, min_games=10):
         DataFrame with columns: player_name, season, pick, salary, production
     """
     # Check for cached historical data
-    # Cache key includes first and last historical season to detect changes
     first_season = seasons[0] if seasons else "none"
     last_season = seasons[-1] if seasons else "none"
     cache_file = f'outputs/historical_data_{first_season}_to_{last_season}_for_{current_season}.pkl'

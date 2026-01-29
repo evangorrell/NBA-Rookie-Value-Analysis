@@ -67,7 +67,7 @@ def train_model(historical_df):
         pipeline, X, y,
         cv=config.CROSS_VALIDATION_FOLDS,
         scoring='r2',
-        n_jobs=1  # Single-threaded to avoid joblib cleanup warnings
+        n_jobs=1
     )
 
     print(f"  CV R² scores: {cv_scores}")
