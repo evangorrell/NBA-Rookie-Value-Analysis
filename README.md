@@ -12,16 +12,6 @@ This project compares each rookie's actual production to what historical rookies
 
 ---
 
-## Key Finding
-
-**Salary alone is a weak predictor of rookie performance.**
-
-Draft position determines salary, but draft position doesn't reliably predict actual NBA performance. Most variance comes from a variety of other factors.
-
-This means the residuals show which rookies are outperforming or underperforming relative to historical norms at their salary level, not precise predictions. Think of it as "contract efficiency" benchmarking.
-
----
-
 ## What You Get
 
 ### 1. Residual Bar Chart
@@ -188,12 +178,16 @@ python main.py  # Re-fetches from NBA API
 
 ### Important Context
 
+The residuals show which rookies are outperforming or underperforming relative to historical norms at their salary level, not precise predictions. Think of it as "contract efficiency" benchmarking.
+
 **Negative residual ≠ Bad player**
 - Even "good" rookie seasons can show deficits at that salary level
 - Contract cost is very high relative to typical performance
 
 **Salary is a weak predictor by design**
-- Draft position determines salary, but draft position doesn't reliably predict performance
+- Draft position determines salary, but draft position doesn't reliably predict actual NBA performance. Most variance comes from a variety of other factors. 
+
+
 - That's why teams can seek "value picks" and avoid "busts"
 
 ---
