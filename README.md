@@ -16,7 +16,7 @@ This project compares each rookie's actual production to what historical rookies
 
 ### 1. Residual Bar Chart
 - **Y-axis:** Rookie names and teams
-- **X-axis:** Residual value (surplus or deficit vs. historical average)
+- **X-axis:** Residual value
 - **Sorted:** Highest surplus at top, biggest deficit at bottom
 
 ### 2. Accuracy Diagnostic Plot (saved to outputs/)
@@ -62,7 +62,7 @@ This project compares each rookie's actual production to what historical rookies
 - Minimum 10 games played
 
 **Rookie Identification:**
-- Draft board data (picks 1-60 only, excludes undrafted players)
+- Draft board data (excludes undrafted players)
 - Matched to season stats via player ID
 
 **Salary Data:**
@@ -159,7 +159,7 @@ NBA-Rookie-Contract-Regression-Value/
 **Manual refresh (mid-season updates):**
 ```bash
 rm outputs/historical_data_*.pkl
-python main.py  # Re-fetches from NBA API
+python main.py
 ```
 
 ---
