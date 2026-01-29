@@ -10,8 +10,9 @@ from src import config
 from src.features.build_dataset import build_historical_dataset, build_current_dataset
 from src.model.train import train_model, save_model
 from src.model.predict import calculate_residuals, export_residuals
+from src.model.diagnostics import validate_specific_players
 from src.display.residual_chart import create_residual_chart, create_summary_stats
-from src.model.diagnostics import create_prediction_accuracy_plot, validate_specific_players
+from src.display.accuracy_plot import create_prediction_accuracy_plot
 
 
 def main():
