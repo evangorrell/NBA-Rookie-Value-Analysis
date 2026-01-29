@@ -2,7 +2,7 @@
 
 **Which teams are getting the most (or least) value per dollar from their rookies?**
 
-This project compares each rookie's actual production to what **historical rookies at the same salary** typically delivered. It uses a regression model trained on multi-season data (inflation-adjusted) to establish historical performance benchmarks, then calculates how much current rookies deviate from those norms.
+This project compares each rookie's actual production to what historical rookies at the same salary typically delivered. It uses a regression model trained on multi-season data (inflation-adjusted) to establish historical performance benchmarks, then calculates how much current rookies deviate from those norms.
 
 **Residual Value = Actual Production − Expected Production (based on historical salary benchmarks)**
 
@@ -14,11 +14,11 @@ This project compares each rookie's actual production to what **historical rooki
 
 ## Key Finding
 
-**Salary alone is a weak predictor of rookie performance** (R² < 30%). 
+**Salary alone is a weak predictor of rookie performance.**
 
-Draft position determines salary (fixed scale), but draft position doesn't reliably predict actual NBA performance. Most variance comes from a variety of other factors.
+Draft position determines salary, but draft position doesn't reliably predict actual NBA performance. Most variance comes from a variety of other factors.
 
-**What this means:** The residuals show which rookies are **outperforming or underperforming relative to historical norms** at their salary level, not precise predictions. Think of it as "contract efficiency" benchmarking.
+This means the residuals show which rookies are outperforming or underperforming relative to historical norms at their salary level, not precise predictions. Think of it as "contract efficiency" benchmarking.
 
 ---
 
@@ -28,18 +28,16 @@ Draft position determines salary (fixed scale), but draft position doesn't relia
 - **Y-axis:** Rookie names and teams
 - **X-axis:** Residual value (surplus or deficit vs. historical average)
 - **Sorted:** Highest surplus at top, biggest deficit at bottom
-- **Colors:** Green (surplus), red (deficit), vertical zero line (historical average)
 
 ### 2. Accuracy Diagnostic Plot (saved to outputs/)
 - Scatter plot: Predicted vs. Actual production
 - Shows model fit quality (MAE, RMSE, R²)
-- Explains why salary is a weak predictor
 - Saved to file, not displayed (metrics printed to terminal)
 
 ### 3. Interactive Player Validation
 - Option to request detailed breakdowns for specific players
 - Shows historical comparisons at similar salary
-- Explains context (top picks vs. second-rounders)
+- Explains context
 - Ranks player in percentile vs. historical rookies at that price
 
 ### 4. Exported Data
@@ -56,12 +54,12 @@ Draft position determines salary (fixed scale), but draft position doesn't relia
 ### Production Metric
 **`production = PIE × Minutes`**
 
-- **PIE (Player Impact Estimate):** NBA's all-in-one efficiency metric (can be negative for poor performance)
+- **Player Impact Estimate (PIE):** NBA's all-in-one efficiency metric
 - **Minutes:** Volume of playing time
 - **Result:** Rate × Volume = Total production value
 
 ### Model Approach
-1. Train **Gradient Boosting Regressor** on historical rookies (2019-2024 by default)
+1. Train a **Gradient Boosting Regressor** on historical rookies 
 2. Model learns: `production ~ f(salary)`
 3. For current rookies, calculate: `residual = actual - expected`
 4. Residuals reveal who's outperforming or underperforming their salary benchmark
@@ -101,12 +99,13 @@ python main.py
 **The script will:**
 1. Load or fetch historical rookie data (for seasons defined in config file)
 2. Train regression model on historical benchmarks
-3. Fetch current season (2025-26) rookie data
+3. Fetch current season rookie data
 4. Calculate residual values
-5. Display residual bar chart (accuracy plot saved to outputs/)
+5. Display residual bar chart
 6. Prompt for optional player breakdowns
 
 **First run:** Fetches data from NBA API (~30-60 seconds)
+
 **Subsequent runs:** Loads from cache (~5 seconds)
 
 ---
@@ -116,16 +115,12 @@ python main.py
 Edit `src/config.py` to customize:
 
 ```python
-START_YEAR = 2019  # First year of training data (2019 by default)
+START_YEAR = 2019  # First year of training data
 
 MIN_GAMES_PLAYED = 10  # Minimum games to include rookie
 
 MODEL_TYPE = "gradient_boosting"  # Regression model type
 CROSS_VALIDATION_FOLDS = 5  # CV folds for validation
-
-CHART_FIGSIZE = (12, 16)  # Chart dimensions
-SURPLUS_COLOR = "#2ecc71"  # Green
-DEFICIT_COLOR = "#e74c3c"  # Red
 ```
 
 ---
@@ -139,7 +134,7 @@ NBA-Rookie-Contract-Regression-Value/
 ├── main.py                  
 ├── data/
 │   └── rookie_scale.csv         # NBA rookie salary scale (4-year averages)
-├── outputs/                     # Generated files
+├── outputs/                     
 │   ├── 2025-26_rookies_residuals.csv
 │   ├── 2025-26_residual_bar_chart.png
 │   ├── 2025-26_accuracy_diagnostic.png
@@ -159,7 +154,8 @@ NBA-Rookie-Contract-Regression-Value/
     │   ├── predict.py           # Calculate residuals
     │   └── diagnostics.py       # Accuracy metrics & player validation
     └── display/
-        └── residual_chart.py    # Generate bar chart visualization
+        ├── residual_chart.py    # Generate bar chart visualization
+        └── accuracy_plot.py     # Generate bar chart visualization
 ```
 
 ---
@@ -167,13 +163,8 @@ NBA-Rookie-Contract-Regression-Value/
 ## Cache Management
 
 **Automatic invalidation:** Cache updates when you change:
-- Current season (e.g., 2025-26 → 2026-27)
-- Historical date range (e.g., START_YEAR = 2019 → 2015)
-
-**Cache filename format:**
-`historical_data_{first-season}_to_{last-season}_for_{current-season}.pkl`
-
-**Example:** `historical_data_2019-20_to_2024-25_for_2025-26.pkl`
+- Current season
+- Historical date range
 
 **Manual refresh (mid-season updates):**
 ```bash
@@ -186,26 +177,24 @@ python main.py  # Re-fetches from NBA API
 ## Understanding the Results
 
 ### Surplus Value (Green Bars)
-- Rookie is producing **more** than historical rookies at that salary
-- Team is getting **good value** for the contract cost
+- Rookie is producing more than historical rookies at that salary
+- Team is getting good value for the contract cost
 - Often: high draft picks exceeding expectations, or late picks overperforming
 
 ### Deficit Value (Red Bars)
-- Rookie is producing **less** than historical rookies at that salary
-- Team is getting **poor value** for the contract cost
+- Rookie is producing less than historical rookies at that salary
+- Team is getting poor value for the contract cost
 - Often: high picks struggling, or injuries/adjustment periods
 
 ### Important Context
 
 **Negative residual ≠ Bad player**
-- Top-3 picks face extremely high expectations
 - Even "good" rookie seasons can show deficits at that salary level
 - Contract cost is very high relative to typical performance
 
-**Salary is a weak predictor (by design)**
-- Draft position determines salary (fixed scale)
-- Draft position doesn't reliably predict performance
-- That's why teams seek "value picks" and avoid "busts"
+**Salary is a weak predictor by design**
+- Draft position determines salary, but draft position doesn't reliably predict performance
+- That's why teams can seek "value picks" and avoid "busts"
 
 ---
 
@@ -213,9 +202,8 @@ python main.py  # Re-fetches from NBA API
 
 1. **Salary-only model:** Doesn't include college stats, combine results, or other predictors
 2. **Historical comparison:** Assumes current rookies face similar contexts as past rookies
-3. **Small sample:** 48 current rookies vs. 285+ historical rookies
-4. **Regular season only:** Excludes playoffs (intentional for consistency)
-5. **Single metric:** PIE × Minutes doesn't capture intangibles or defensive impact fully
+3. **Regular season only:** Excludes playoffs (intentional for consistency)
+4. **Single metric:** PIE × Minutes doesn't fully capture defensive impact or intangibles
 
 ---
 
