@@ -203,7 +203,7 @@ The residuals show which rookies are outperforming or underperforming relative t
 
 ## License
 
-MIT License - Feel free to use and modify
+ISC
 
 ## Credits
 
